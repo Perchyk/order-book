@@ -14,3 +14,5 @@ The imperfect things:
 - I tried to implement animation but I realized that I don't understand the business logic. From my perspective (I'm not very experienced with crypto analysis instruments), it looks like absolutely random rows are highlighted - all data is updated but only certain rows are animated. I don't know. It's not hard to add a couple of @keyframes but it's much harder to make them make sense ¯\_(ツ)\_/¯
 - as we are limited to 20 entries at once, there isn't as much data as in the original component when 10+ rounding levels are chosen. I hope that's expected, not 100% sure though.
 - in the real app I would've added at least a couple of browser (or "snapshot", or "visual") tests with Playwright but I felt like it's out of the scope considering the time suggested for the task.
+- it's not really mobile friendly (tap events etc, and the component overflows a little)
+- pretty much no a11y, it's mostly a hell of <div>. Accessibility is a huge time sink so I didn't want to start on it
