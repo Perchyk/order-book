@@ -1,5 +1,5 @@
-`yarn dev` to launch the app in dev mode - dev server will be on http://localhost:5173/
-`yarn build` for prod build
+- `yarn dev` to launch the app in dev mode - dev server will be on http://localhost:5173/
+- `yarn build` for prod build
 
 Stack choice:
 
