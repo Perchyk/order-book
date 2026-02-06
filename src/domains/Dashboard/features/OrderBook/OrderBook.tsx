@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import { DataLoader } from './DataLoader'
 
-type Props = {
-  levels?: 5 | 10 | 20
-}
-
 type TradingPair = {
   base: string
   quote: string
@@ -17,7 +13,7 @@ const TRADING_PAIRS: TradingPair[] = [
   { base: 'SOL', quote: 'USDT', symbol: 'SOLUSDT' },
 ]
 
-export function OrderBook({ levels = 20 }: Props) {
+export function OrderBook() {
   const [selectedPair, setSelectedPair] = useState<TradingPair>(
     TRADING_PAIRS[0],
   )
@@ -42,7 +38,6 @@ export function OrderBook({ levels = 20 }: Props) {
 
       <DataLoader
         symbol={selectedPair.symbol}
-        levels={levels}
         base={selectedPair.base}
         quote={selectedPair.quote}
       />

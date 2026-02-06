@@ -1,18 +1,16 @@
-import {
-  useOrderBookStream,
-  type UseOrderBookStreamOptions,
-} from 'app/domains/Dashboard/useCases/useOrderBookStream'
+import { useOrderBookStream } from 'app/domains/Dashboard/useCases/useOrderBookStream'
 import { notReachable } from 'app/utils'
 import { Skeleton } from './components/Skeleton'
 import { Layout } from './Layout'
 
-type Props = UseOrderBookStreamOptions & {
+type Props = {
+  symbol: string
   base: string
   quote: string
 }
 
-export function DataLoader({ base, quote, ...streamOptions }: Props) {
-  const queryResult = useOrderBookStream(streamOptions)
+export function DataLoader({ base, quote, symbol }: Props) {
+  const queryResult = useOrderBookStream({ symbol })
 
   switch (queryResult.type) {
     case 'loading':

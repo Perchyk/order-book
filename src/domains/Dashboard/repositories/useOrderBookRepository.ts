@@ -18,11 +18,11 @@ export function useOrderBookRepository(
   config: OrderBookRepositoryConfig,
 ): OrderBookQueryResult {
   const queryClient = useQueryClient()
-  const { symbol, levels = 20 } = config
+  const { symbol } = config
 
   const queryKey = useMemo(
-    () => ['orderBook', symbol, levels] as const,
-    [symbol, levels],
+    () => ['orderBook', symbol] as const,
+    [symbol],
   )
 
   const query = useQuery<OrderBookData | null>({
@@ -65,6 +65,7 @@ export function useOrderBookRepository(
     return () => {
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current)
+        frameRef.current = undefined
       }
     }
   }, [])

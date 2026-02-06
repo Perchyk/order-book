@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 
 export type BinanceWebSocketConfig = {
   symbol: string
-  levels?: 5 | 10 | 20
 }
 
 export type BinanceWebSocketCallbacks = {
@@ -21,7 +20,7 @@ export function useBinanceWebSocketDataSource(
   const reconnectTimeoutRef = useRef<number | undefined>(undefined)
   const onMessageRef = useRef(callbacks.onMessage)
 
-  const { symbol, levels } = config
+  const { symbol } = config
 
   useEffect(() => {
     onMessageRef.current = callbacks.onMessage
@@ -32,7 +31,7 @@ export function useBinanceWebSocketDataSource(
     const baseReconnectDelay = 1000
     let shouldReconnect = true
 
-    const streamName = `${symbol.toLowerCase()}@depth${levels}`
+    const streamName = `${symbol.toLowerCase()}@depth20`
     const url = `wss://stream.binance.com:9443/ws/${streamName}`
 
     const connect = () => {
@@ -89,7 +88,7 @@ export function useBinanceWebSocketDataSource(
         wsRef.current = null
       }
     }
-  }, [symbol, levels])
+  }, [symbol])
 
   return {
     isConnected,
