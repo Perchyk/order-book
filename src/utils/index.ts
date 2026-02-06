@@ -1,1 +1,1 @@
-export { notReachable as assertUnreachable } from './assertUnreachable'
+export { notReachable } from './notReachable'

@@ -1,20 +1,51 @@
+import { useState } from 'react'
 import { DataLoader } from './DataLoader'
 
 type Props = {
-  symbol: string
   levels?: 5 | 10 | 20
-  updateSpeed?: '100ms' | '1000ms'
 }
 
-export function OrderBook({
-  symbol,
-  levels = 20,
-  updateSpeed = '1000ms',
-}: Props) {
+type TradingPair = {
+  base: string
+  quote: string
+  symbol: string
+}
+
+const TRADING_PAIRS: TradingPair[] = [
+  { base: 'BTC', quote: 'USDT', symbol: 'BTCUSDT' },
+  { base: 'ETH', quote: 'USDT', symbol: 'ETHUSDT' },
+  { base: 'BNB', quote: 'USDT', symbol: 'BNBUSDT' },
+]
+
+export function OrderBook({ levels = 20 }: Props) {
+  const [selectedPair, setSelectedPair] = useState<TradingPair>(
+    TRADING_PAIRS[0],
+  )
+
   return (
-    <div>
-      <h1>Order Book - {symbol}</h1>
-      <DataLoader symbol={symbol} levels={levels} updateSpeed={updateSpeed} />
-    </div>
+    <>
+      <div className="flex gap-2 mb-4">
+        {TRADING_PAIRS.map((pair) => (
+          <button
+            key={pair.symbol}
+            onClick={() => setSelectedPair(pair)}
+            className={`px-4 py-2 border-none cursor-pointer ${
+              selectedPair.symbol === pair.symbol
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-600'
+            }`}
+          >
+            {pair.base}/{pair.quote}
+          </button>
+        ))}
+      </div>
+
+      <DataLoader
+        symbol={selectedPair.symbol}
+        levels={levels}
+        base={selectedPair.base}
+        quote={selectedPair.quote}
+      />
+    </>
   )
 }

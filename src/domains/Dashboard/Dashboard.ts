@@ -5,3 +5,5 @@ export type OrderBookData = {
   bids: OrderBookEntry[]
   asks: OrderBookEntry[]
 }
+
+export type OrderBookMode = 'default' | 'buy' | 'sell'

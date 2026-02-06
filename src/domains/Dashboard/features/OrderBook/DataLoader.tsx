@@ -2,23 +2,26 @@ import {
   useOrderBookStream,
   type UseOrderBookStreamOptions,
 } from 'app/domains/Dashboard/useCases/useOrderBookStream'
-import { notReachable } from 'app/utils/notReachable'
+import { notReachable } from 'app/utils'
 import { Layout } from './Layout'
 
-type Props = UseOrderBookStreamOptions
+type Props = UseOrderBookStreamOptions & {
+  base: string
+  quote: string
+}
 
-export function DataLoader(props: Props) {
-  const queryResult = useOrderBookStream(props)
+export function DataLoader({ base, quote, ...streamOptions }: Props) {
+  const queryResult = useOrderBookStream(streamOptions)
 
   switch (queryResult.type) {
     case 'loading':
-      return <p>Connecting and loading data...</p>
+      return <p className="text-gray-500">Connecting and loading data...</p>
 
     case 'error':
-      return <p style={{ color: 'red' }}>Error: {queryResult.message}</p>
+      return <p className="text-text-sell">Error: {queryResult.message}</p>
 
     case 'loaded':
-      return <Layout data={queryResult.data} />
+      return <Layout data={queryResult.data} base={base} quote={quote} />
 
     default:
       return notReachable(queryResult)

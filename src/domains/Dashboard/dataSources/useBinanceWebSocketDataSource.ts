@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 export type BinanceWebSocketConfig = {
   symbol: string
   levels?: 5 | 10 | 20
-  updateSpeed?: '100ms' | '1000ms'
 }
 
 export type BinanceWebSocketCallbacks = {
@@ -20,16 +19,20 @@ export function useBinanceWebSocketDataSource(
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectAttemptsRef = useRef(0)
   const reconnectTimeoutRef = useRef<number | undefined>(undefined)
+  const onMessageRef = useRef(callbacks.onMessage)
 
-  const { symbol, levels = 20, updateSpeed = '1000ms' } = config
-  const { onMessage } = callbacks
+  const { symbol, levels } = config
+
+  useEffect(() => {
+    onMessageRef.current = callbacks.onMessage
+  }, [callbacks.onMessage])
 
   useEffect(() => {
     const maxReconnectAttempts = 5
-    const reconnectDelay = 1000
+    const baseReconnectDelay = 1000
+    let shouldReconnect = true
 
-    const speedSuffix = updateSpeed === '100ms' ? '@100ms' : ''
-    const streamName = `${symbol.toLowerCase()}@depth${levels}${speedSuffix}`
+    const streamName = `${symbol.toLowerCase()}@depth${levels}`
     const url = `wss://stream.binance.com:9443/ws/${streamName}`
 
     const connect = () => {
@@ -45,7 +48,7 @@ export function useBinanceWebSocketDataSource(
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data)
-          onMessage(data)
+          onMessageRef.current(data)
         } catch (err) {
           console.error('Failed to parse WebSocket message:', err)
         }
@@ -59,11 +62,16 @@ export function useBinanceWebSocketDataSource(
         setIsConnected(false)
         setError(null)
 
-        if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+        if (
+          shouldReconnect &&
+          reconnectAttemptsRef.current < maxReconnectAttempts
+        ) {
           reconnectAttemptsRef.current++
-          const delay = reconnectDelay * reconnectAttemptsRef.current
+          const delay = Math.min(
+            30000,
+            baseReconnectDelay * 2 ** reconnectAttemptsRef.current,
+          )
 
-          console.log(`Reconnecting... Attempt ${reconnectAttemptsRef.current}`)
           reconnectTimeoutRef.current = window.setTimeout(connect, delay)
         }
       }
@@ -72,15 +80,16 @@ export function useBinanceWebSocketDataSource(
     connect()
 
     return () => {
+      shouldReconnect = false
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current)
       }
       if (wsRef.current) {
-        wsRef.current.close()
+        wsRef.current.close(1000, 'cleanup')
         wsRef.current = null
       }
     }
-  }, [symbol, levels, updateSpeed, onMessage])
+  }, [symbol, levels])
 
   return {
     isConnected,

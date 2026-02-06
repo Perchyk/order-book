@@ -1,10 +1,10 @@
-import './App.css'
 import { OrderBook } from 'app/domains/Dashboard/features/OrderBook'
+import './App.css'
 
 function App() {
   return (
     <div className="card">
-      <OrderBook symbol="BTCUSDT" levels={20} updateSpeed="1000ms" />
+      <OrderBook levels={20} />
     </div>
   )
 }
