@@ -31,9 +31,7 @@ export function Layout({ data, base, quote }: Props) {
   const [displayAvgSum, setDisplayAvgSum] = useState(true)
   const [tickSize, setTickSize] = useState(0.01)
 
-  const allPrices = [...data.asks, ...data.bids].map(([price]) =>
-    parseFloat(price),
-  )
+  const allPrices = [...data.asks, ...data.bids].map(([price]) => price)
   const maxPrice = Math.max(...allPrices)
 
   const effectiveTickSize = tickSize >= maxPrice * 0.1 ? 0.01 : tickSize

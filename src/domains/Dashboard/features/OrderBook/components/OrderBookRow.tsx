@@ -7,8 +7,8 @@ type Stats = {
 }
 
 type Props = {
-  price: string
-  quantity: string
+  price: number
+  quantity: number
   depthPercent: number
   side: 'buy' | 'sell'
   isHighlighted: boolean
@@ -37,9 +37,7 @@ export function OrderBookRow({
   priceDecimals,
   onMouseEnter,
 }: Props) {
-  const priceNum = parseFloat(price)
-  const quantityNum = parseFloat(quantity)
-  const totalValue = priceNum * quantityNum
+  const totalValue = price * quantity
   const total = rounding
     ? toSignificantNumber(totalValue, totalValue >= 1000 ? 2 : 4)
     : totalValue.toFixed(2)
@@ -62,9 +60,9 @@ export function OrderBookRow({
       />
       {isHighlighted && <div className="absolute inset-0 bg-white opacity-5" />}
       <div className={`${textColor} relative`}>
-        {priceNum.toFixed(priceDecimals)}
+        {price.toFixed(priceDecimals)}
       </div>
-      <div className="text-right relative">{quantityNum.toString()}</div>
+      <div className="text-right relative">{quantity.toString()}</div>
       <div className="text-right relative">{total}</div>
       {isHovered && stats && (
         <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 pointer-events-none z-10 whitespace-nowrap rounded bg-neutral-700 px-2 py-1 text-xs text-white">

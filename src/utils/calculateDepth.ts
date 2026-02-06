@@ -7,8 +7,8 @@ export function calculateDepth(
 ): { bidsDepth: number[]; asksDepth: number[] } {
   if (mode === 'amount') {
     // For amount mode, find global max across both sides
-    const bidQuantities = bids.map(([, quantity]) => parseFloat(quantity))
-    const askQuantities = asks.map(([, quantity]) => parseFloat(quantity))
+    const bidQuantities = bids.map(([, quantity]) => quantity)
+    const askQuantities = asks.map(([, quantity]) => quantity)
     const globalMax = Math.max(...bidQuantities, ...askQuantities)
 
     return {
@@ -17,8 +17,8 @@ export function calculateDepth(
     }
   } else {
     // Cumulative mode: calculate cumulative sums for both sides
-    const bidQuantities = bids.map(([, quantity]) => parseFloat(quantity))
-    const askQuantities = asks.map(([, quantity]) => parseFloat(quantity))
+    const bidQuantities = bids.map(([, quantity]) => quantity)
+    const askQuantities = asks.map(([, quantity]) => quantity)
 
     const bidsCumulative: number[] = []
     let bidSum = 0

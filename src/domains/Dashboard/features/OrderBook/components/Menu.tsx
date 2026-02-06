@@ -109,18 +109,6 @@ export const Menu = ({
                 <span>Cumulative</span>
               </label>
             </div>
-
-            <div className="h-px bg-white/10" />
-
-            <div className="flex items-center justify-between">
-              <span className="text-slate-300">Animations</span>
-
-              <label className="relative inline-flex cursor-pointer items-center">
-                <input type="checkbox" className="peer sr-only" />
-                <div className="h-5 w-9 rounded-full bg-slate-600 peer-checked:bg-blue-500 transition-colors" />
-                <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4" />
-              </label>
-            </div>
           </div>
         </div>
       </details>

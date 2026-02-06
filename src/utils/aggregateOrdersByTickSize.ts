@@ -7,20 +7,18 @@ export function aggregateOrdersByTickSize(
   const aggregated = new Map<number, number>()
 
   for (const [price, quantity] of orders) {
-    const priceNum = parseFloat(price)
-    const quantityNum = parseFloat(quantity)
-    const roundedPrice = Math.round(priceNum / tickSize) * tickSize
+    const roundedPrice = Math.round(price / tickSize) * tickSize
 
     const currentQuantity = aggregated.get(roundedPrice) || 0
-    aggregated.set(roundedPrice, currentQuantity + quantityNum)
+    aggregated.set(roundedPrice, currentQuantity + quantity)
   }
 
   return Array.from(aggregated.entries())
     .map(
       ([price, quantity]): OrderBookEntry => [
-        price.toString(),
-        parseFloat(quantity.toFixed(8)).toString(),
+        price,
+        parseFloat(quantity.toFixed(8)),
       ],
     )
-    .sort((a, b) => parseFloat(b[0]) - parseFloat(a[0]))
+    .sort((a, b) => b[0] - a[0])
 }

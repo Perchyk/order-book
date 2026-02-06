@@ -6,11 +6,11 @@ type Props = {
 
 export function BuySellRatio({ data }: Props) {
   const totalBids = data.bids.reduce(
-    (sum, [, quantity]) => sum + parseFloat(quantity),
+    (sum, [, quantity]) => sum + quantity,
     0,
   )
   const totalAsks = data.asks.reduce(
-    (sum, [, quantity]) => sum + parseFloat(quantity),
+    (sum, [, quantity]) => sum + quantity,
     0,
   )
   const total = totalBids + totalAsks

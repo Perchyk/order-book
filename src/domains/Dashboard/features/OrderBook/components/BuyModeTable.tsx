@@ -26,15 +26,18 @@ export function BuyModeTable({
   const aggregatedBids = aggregateOrdersByTickSize(data.bids, tickSize)
   const aggregatedAsks = aggregateOrdersByTickSize(data.asks, tickSize)
 
-  const bidsDepth = calculateDepth(aggregatedBids, aggregatedAsks, depthMode)
-    .bidsDepth
+  const bidsDepth = calculateDepth(
+    aggregatedBids,
+    aggregatedAsks,
+    depthMode,
+  ).bidsDepth
 
   const priceDecimals = Math.max(0, -Math.log10(tickSize))
 
   return (
     <div className="text-xs">
       <TableHeader base={base} quote={quote} />
-      <div className="min-h-[500px]">
+      <div className="min-h-125">
         <OrderBookSection
           orders={aggregatedBids}
           depth={bidsDepth}
@@ -45,9 +48,11 @@ export function BuyModeTable({
           displayAvgSum={displayAvgSum}
           borderPosition="bottom"
           priceDecimals={priceDecimals}
-          getHighlightedOrders={(hoveredIndex, _displayOrders, originalOrders) =>
-            originalOrders.slice(0, hoveredIndex + 1)
-          }
+          getHighlightedOrders={(
+            hoveredIndex,
+            _displayOrders,
+            originalOrders,
+          ) => originalOrders.slice(0, hoveredIndex + 1)}
           isHighlighted={(index, hoveredIndex) => index <= hoveredIndex}
         />
       </div>

@@ -1,4 +1,4 @@
-export type OrderBookEntry = [price: string, quantity: string]
+export type OrderBookEntry = [price: number, quantity: number]
 
 export type OrderBookData = {
   lastUpdateId: number
