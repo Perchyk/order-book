@@ -3,6 +3,7 @@ import {
   type UseOrderBookStreamOptions,
 } from 'app/domains/Dashboard/useCases/useOrderBookStream'
 import { notReachable } from 'app/utils'
+import { Skeleton } from './components/Skeleton'
 import { Layout } from './Layout'
 
 type Props = UseOrderBookStreamOptions & {
@@ -15,7 +16,7 @@ export function DataLoader({ base, quote, ...streamOptions }: Props) {
 
   switch (queryResult.type) {
     case 'loading':
-      return <p className="text-gray-500">Connecting and loading data...</p>
+      return <Skeleton />
 
     case 'error':
       return <p className="text-text-sell">Error: {queryResult.message}</p>
