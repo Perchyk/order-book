@@ -14,7 +14,7 @@ type TradingPair = {
 const TRADING_PAIRS: TradingPair[] = [
   { base: 'BTC', quote: 'USDT', symbol: 'BTCUSDT' },
   { base: 'ETH', quote: 'USDT', symbol: 'ETHUSDT' },
-  { base: 'BNB', quote: 'USDT', symbol: 'BNBUSDT' },
+  { base: 'SOL', quote: 'USDT', symbol: 'SOLUSDT' },
 ]
 
 export function OrderBook({ levels = 20 }: Props) {

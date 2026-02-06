@@ -2,15 +2,23 @@ export type MenuMsg =
   | { type: 'rounding_changed'; value: boolean }
   | { type: 'show_ratio_changed'; value: boolean }
   | { type: 'depth_mode_changed'; value: 'amount' | 'cumulative' }
+  | { type: 'display_avg_sum_changed'; value: boolean }
 
 type Props = {
   onMsg: (msg: MenuMsg) => void
   rounding: boolean
   showRatio: boolean
   depthMode: 'amount' | 'cumulative'
+  displayAvgSum: boolean
 }
 
-export const Menu = ({ onMsg, rounding, showRatio, depthMode }: Props) => {
+export const Menu = ({
+  onMsg,
+  rounding,
+  showRatio,
+  depthMode,
+  displayAvgSum,
+}: Props) => {
   return (
     <nav className="relative inline-block text-left">
       <details className="group">
@@ -24,6 +32,21 @@ export const Menu = ({ onMsg, rounding, showRatio, depthMode }: Props) => {
               <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                 Order Book Display
               </h4>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={displayAvgSum}
+                  onChange={(e) =>
+                    onMsg({
+                      type: 'display_avg_sum_changed',
+                      value: e.target.checked,
+                    })
+                  }
+                  className="checkbox"
+                />
+                <span>Display Avg.&Sum</span>
+              </label>
 
               <label className="flex items-center gap-3 cursor-pointer">
                 <input

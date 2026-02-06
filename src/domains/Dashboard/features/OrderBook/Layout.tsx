@@ -1,6 +1,9 @@
 import { Tooltip } from 'app/components'
 import type { OrderBookData, OrderBookMode } from 'app/domains/Dashboard'
-import { Menu } from 'app/domains/Dashboard/features/OrderBook/components/Menu'
+import {
+  Menu,
+  type MenuMsg,
+} from 'app/domains/Dashboard/features/OrderBook/components/Menu'
 import { BuyMode } from 'app/icons/BuyMode'
 import { DefaultMode } from 'app/icons/DefaultMode'
 import { SellMode } from 'app/icons/SellMode'
@@ -21,9 +24,12 @@ export function Layout({ data, base, quote }: Props) {
   const [mode, setMode] = useState<OrderBookMode>('default')
   const [rounding, setRounding] = useState(true)
   const [showRatio, setShowRatio] = useState(true)
-  const [depthMode, setDepthMode] = useState<'amount' | 'cumulative'>('cumulative')
+  const [depthMode, setDepthMode] = useState<'amount' | 'cumulative'>(
+    'cumulative',
+  )
+  const [displayAvgSum, setDisplayAvgSum] = useState(true)
 
-  const handleMenuMsg = useCallback((msg: Parameters<typeof Menu>[0]['onMsg'] extends (msg: infer M) => void ? M : never) => {
+  const handleMenuMsg = useCallback((msg: MenuMsg) => {
     switch (msg.type) {
       case 'rounding_changed':
         setRounding(msg.value)
@@ -33,6 +39,9 @@ export function Layout({ data, base, quote }: Props) {
         break
       case 'depth_mode_changed':
         setDepthMode(msg.value)
+        break
+      case 'display_avg_sum_changed':
+        setDisplayAvgSum(msg.value)
         break
       default:
         notReachable(msg)
@@ -51,6 +60,7 @@ export function Layout({ data, base, quote }: Props) {
           rounding={rounding}
           showRatio={showRatio}
           depthMode={depthMode}
+          displayAvgSum={displayAvgSum}
           onMsg={handleMenuMsg}
         />
       </div>
@@ -88,6 +98,7 @@ export function Layout({ data, base, quote }: Props) {
                 quote={quote}
                 rounding={rounding}
                 depthMode={depthMode}
+                displayAvgSum={displayAvgSum}
               />
             )
 
@@ -99,6 +110,7 @@ export function Layout({ data, base, quote }: Props) {
                 quote={quote}
                 rounding={rounding}
                 depthMode={depthMode}
+                displayAvgSum={displayAvgSum}
               />
             )
 
@@ -110,6 +122,7 @@ export function Layout({ data, base, quote }: Props) {
                 quote={quote}
                 rounding={rounding}
                 depthMode={depthMode}
+                displayAvgSum={displayAvgSum}
               />
             )
 
