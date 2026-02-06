@@ -13,6 +13,7 @@ type Props = {
   rounding: boolean
   displayAvgSum: boolean
   borderPosition?: 'top' | 'bottom'
+  priceDecimals: number
   getHighlightedOrders: (
     hoveredIndex: number,
     displayOrders: OrderBookEntry[],
@@ -31,6 +32,7 @@ export function OrderBookSection({
   rounding,
   displayAvgSum,
   borderPosition = 'bottom',
+  priceDecimals,
   getHighlightedOrders,
   isHighlighted,
 }: Props) {
@@ -67,6 +69,7 @@ export function OrderBookSection({
             base={base}
             quote={quote}
             borderPosition={borderPosition}
+            priceDecimals={priceDecimals}
             onMouseEnter={() => setHoveredIndex(index)}
           />
         )

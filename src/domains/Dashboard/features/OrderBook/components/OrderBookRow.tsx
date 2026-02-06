@@ -18,6 +18,7 @@ type Props = {
   base: string
   quote: string
   borderPosition?: 'top' | 'bottom'
+  priceDecimals: number
   onMouseEnter: () => void
 }
 
@@ -33,6 +34,7 @@ export function OrderBookRow({
   base,
   quote,
   borderPosition = 'bottom',
+  priceDecimals,
   onMouseEnter,
 }: Props) {
   const priceNum = parseFloat(price)
@@ -59,7 +61,9 @@ export function OrderBookRow({
         style={{ width: `${depthPercent}%` }}
       />
       {isHighlighted && <div className="absolute inset-0 bg-white opacity-5" />}
-      <div className={`${textColor} relative`}>{priceNum.toFixed(2)}</div>
+      <div className={`${textColor} relative`}>
+        {priceNum.toFixed(priceDecimals)}
+      </div>
       <div className="text-right relative">{quantityNum.toString()}</div>
       <div className="text-right relative">{total}</div>
       {isHovered && stats && (

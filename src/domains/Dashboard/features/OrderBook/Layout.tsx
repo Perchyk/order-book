@@ -4,6 +4,7 @@ import {
   Menu,
   type MenuMsg,
 } from 'app/domains/Dashboard/features/OrderBook/components/Menu'
+import { TickSizeMenu } from 'app/domains/Dashboard/features/OrderBook/components/TickSizeMenu'
 import { BuyMode } from 'app/icons/BuyMode'
 import { DefaultMode } from 'app/icons/DefaultMode'
 import { SellMode } from 'app/icons/SellMode'
@@ -28,6 +29,14 @@ export function Layout({ data, base, quote }: Props) {
     'cumulative',
   )
   const [displayAvgSum, setDisplayAvgSum] = useState(true)
+  const [tickSize, setTickSize] = useState(0.01)
+
+  const allPrices = [...data.asks, ...data.bids].map(([price]) =>
+    parseFloat(price),
+  )
+  const maxPrice = Math.max(...allPrices)
+
+  const effectiveTickSize = tickSize >= maxPrice * 0.1 ? 0.01 : tickSize
 
   const handleMenuMsg = useCallback((msg: MenuMsg) => {
     switch (msg.type) {
@@ -51,6 +60,9 @@ export function Layout({ data, base, quote }: Props) {
   const handleDefaultModeClick = useCallback(() => setMode('default'), [])
   const handleBuyModeClick = useCallback(() => setMode('buy'), [])
   const handleSellModeClick = useCallback(() => setMode('sell'), [])
+  const handleTickSizeChange = useCallback((newTickSize: number) => {
+    setTickSize(newTickSize)
+  }, [])
 
   return (
     <div className="bg-[#181A20] rounded-lg p-4">
@@ -66,26 +78,33 @@ export function Layout({ data, base, quote }: Props) {
       </div>
 
       <hr className="my-2 -mx-4 h-px border-t-0 bg-neutral-100 dark:bg-white/10" />
-      <div className="flex gap-2 mb-4">
-        <Tooltip label="Order book">
-          <DefaultMode
-            className="cursor-pointer w-4 h-4"
-            onClick={handleDefaultModeClick}
-          />
-        </Tooltip>
+      <div className="flex gap-2 mb-4 items-center justify-between">
+        <div className="flex gap-2">
+          <Tooltip label="Order book">
+            <DefaultMode
+              className="cursor-pointer w-4 h-4"
+              onClick={handleDefaultModeClick}
+            />
+          </Tooltip>
 
-        <Tooltip label="Buy mode">
-          <BuyMode
-            className="cursor-pointer w-4 h-4"
-            onClick={handleBuyModeClick}
-          />
-        </Tooltip>
-        <Tooltip label="Sell mode">
-          <SellMode
-            className="cursor-pointer w-4 h-4"
-            onClick={handleSellModeClick}
-          />
-        </Tooltip>
+          <Tooltip label="Buy mode">
+            <BuyMode
+              className="cursor-pointer w-4 h-4"
+              onClick={handleBuyModeClick}
+            />
+          </Tooltip>
+          <Tooltip label="Sell mode">
+            <SellMode
+              className="cursor-pointer w-4 h-4"
+              onClick={handleSellModeClick}
+            />
+          </Tooltip>
+        </div>
+        <TickSizeMenu
+          tickSize={effectiveTickSize}
+          onTickSizeChange={handleTickSizeChange}
+          maxPrice={maxPrice}
+        />
       </div>
 
       {(() => {
@@ -99,6 +118,7 @@ export function Layout({ data, base, quote }: Props) {
                 rounding={rounding}
                 depthMode={depthMode}
                 displayAvgSum={displayAvgSum}
+                tickSize={effectiveTickSize}
               />
             )
 
@@ -111,6 +131,7 @@ export function Layout({ data, base, quote }: Props) {
                 rounding={rounding}
                 depthMode={depthMode}
                 displayAvgSum={displayAvgSum}
+                tickSize={effectiveTickSize}
               />
             )
 
@@ -123,6 +144,7 @@ export function Layout({ data, base, quote }: Props) {
                 rounding={rounding}
                 depthMode={depthMode}
                 displayAvgSum={displayAvgSum}
+                tickSize={effectiveTickSize}
               />
             )
 

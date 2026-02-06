@@ -1,4 +1,5 @@
 import type { OrderBookData } from 'app/domains/Dashboard'
+import { aggregateOrdersByTickSize } from 'app/utils/aggregateOrdersByTickSize'
 import { calculateDepth } from 'app/utils/calculateDepth'
 import { OrderBookSection } from './OrderBookSection'
 import { TableHeader } from './TableHeader'
@@ -10,6 +11,7 @@ type Props = {
   rounding: boolean
   depthMode: 'amount' | 'cumulative'
   displayAvgSum: boolean
+  tickSize: number
 }
 
 export function DefaultModeTable({
@@ -19,11 +21,15 @@ export function DefaultModeTable({
   rounding,
   depthMode,
   displayAvgSum,
+  tickSize,
 }: Props) {
   const displayCount = 10
 
-  const asksSlice = data.asks.slice(0, displayCount)
-  const bidsSlice = data.bids.slice(0, displayCount)
+  const aggregatedAsks = aggregateOrdersByTickSize(data.asks, tickSize)
+  const aggregatedBids = aggregateOrdersByTickSize(data.bids, tickSize)
+
+  const asksSlice = aggregatedAsks.slice(0, displayCount)
+  const bidsSlice = aggregatedBids.slice(0, displayCount)
 
   const { bidsDepth: bidsDepthCalculated, asksDepth: asksDepthCalculated } =
     calculateDepth(bidsSlice, asksSlice, depthMode)
@@ -33,9 +39,12 @@ export function DefaultModeTable({
   const bidsToDisplay = bidsSlice
   const bidsDepth = bidsDepthCalculated
 
+  const priceDecimals = Math.max(0, -Math.log10(tickSize))
+
   return (
     <div className="text-xs">
       <TableHeader base={base} quote={quote} />
+      <div className="min-h-[500px]">
 
       <OrderBookSection
         orders={asksToDisplay}
@@ -47,6 +56,7 @@ export function DefaultModeTable({
         rounding={rounding}
         displayAvgSum={displayAvgSum}
         borderPosition="top"
+        priceDecimals={priceDecimals}
         getHighlightedOrders={(
           hoveredIndex,
           _displayOrders,
@@ -66,11 +76,13 @@ export function DefaultModeTable({
         rounding={rounding}
         displayAvgSum={displayAvgSum}
         borderPosition="bottom"
+        priceDecimals={priceDecimals}
         getHighlightedOrders={(hoveredIndex, _displayOrders, originalOrders) =>
           originalOrders.slice(0, hoveredIndex + 1)
         }
         isHighlighted={(index, hoveredIndex) => index <= hoveredIndex}
       />
+      </div>
     </div>
   )
 }
